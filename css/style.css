@@ -804,128 +804,181 @@ html, body {
 
 @media (max-width: 768px) {
 
-  /* Allow full page scroll on mobile */
+  /* ── Page / scroll ── */
   html, body {
     overflow: auto;
     height: auto;
+    min-height: 100%;
   }
 
   .lab-page {
     height: auto;
     min-height: 100vh;
     overflow: visible;
-    padding: 0.5rem;
+    padding: 0.35rem;
     align-items: flex-start;
   }
 
   .lab-panel {
     height: auto;
+    min-height: auto;
     overflow: visible;
-    min-height: 100%;
   }
 
-  /* Compact header */
+  /* ── Header ── */
   .lab-header {
-    padding: 0.6rem 0.75rem;
-    gap: 0.5rem;
+    padding: 0.5rem 0.65rem;
+    gap: 0.4rem;
   }
 
   .lab-eyebrow {
-    font-size: 0.55rem;
-    letter-spacing: 0.12em;
+    font-size: 0.5rem;
+    letter-spacing: 0.1em;
   }
 
-  /* Status bar: stack label/text/turn vertically on very small screens */
+  /* Hide long eyebrow text in the header on very small screens */
+  .lab-header-center .lab-eyebrow {
+    display: none;
+  }
+
+  /* ── Status bar ── */
   .lab-status-bar {
+    padding: 0.35rem 0.65rem;
+    gap: 0.4rem;
     flex-wrap: wrap;
-    gap: 0.25rem;
-    padding: 0.4rem 0.75rem;
   }
 
-  /* Stack game and visualizer vertically */
+  .lab-status-text {
+    font-size: 0.65rem;
+  }
+
+  /* ── Main layout: single column ── */
   .lab-main {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    flex: none;
+    min-height: 0;
     overflow: visible;
   }
 
-  /* Game section */
+  /* ── Game section ── */
   .game-section {
     border-right: none;
     border-bottom: 1px solid #1a1a1a;
-    padding: 0.75rem;
+    padding: 0.65rem;
     overflow: visible;
+    justify-content: flex-start;
+    gap: 0.6rem;
   }
 
-  /* Board: fill column width on mobile instead of being constrained by vh */
+  /* Board: square, fills available width */
   .board {
-    width: min(100%, calc(100vw - 2.5rem));
+    width: min(100%, calc(100vw - 1.7rem));
   }
 
-  /* Larger touch targets for buttons */
+  /* Settings row */
+  .game-settings {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  /* Game controls row */
+  .game-controls {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  /* ── Touch-friendly buttons ── */
   .lab-btn {
-    padding: 0.5rem 0.7rem;
+    padding: 0.5rem 0.75rem;
     font-size: 0.65rem;
-    min-height: 36px;
+    min-height: 38px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
   }
 
   .lab-help-btn {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     font-size: 0.85rem;
   }
 
-  /* Settings row: wrap on small screens */
-  .game-settings {
-    flex-wrap: wrap;
-    gap: 0.6rem;
-  }
-
-  /* Visualizer section */
+  /* ── Visualizer section ── */
   .visualizer-section {
     overflow: visible;
+    background: #fff;
   }
 
-  /* Make heatmap/pathfinder bodies wrap if canvas is too wide */
+  /* Heatmap and pathfinder: let canvas sit on its own line, legend wraps below */
   .vis-heatmap-body,
   .vis-pathfinder-body {
     flex-wrap: wrap;
+    gap: 0.5rem;
   }
 
-  /* Difficulty buttons: allow wrap */
+  .vis-heatmap-body canvas,
+  .vis-pathfinder-body canvas {
+    flex-shrink: 0;
+  }
+
+  .vis-heatmap-legend,
+  .vis-pathfinder-desc {
+    flex: 1 1 100%;
+    padding-top: 0;
+  }
+
+  /* Difficulty row */
+  .vis-difficulty {
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    padding: 0.35rem 0.65rem;
+  }
+
   .vis-difficulty-btns {
     flex-wrap: wrap;
     gap: 0.35rem;
   }
 
-  /* Game log: taller on mobile so you can read it without constant scrolling */
-  .vis-log {
-    max-height: 140px;
+  /* Stats grid: 2×2 stays, just tighter padding */
+  .vis-stat {
+    padding: 0.3rem 0.5rem;
   }
 
-  /* Help overlay: fit within viewport */
+  /* Game log */
+  .vis-log {
+    max-height: 160px;
+  }
+
+  /* Phase tracker */
+  .vis-phase-tracker {
+    padding: 0.25rem 0.65rem;
+  }
+
+  /* Log header */
+  .vis-log-header {
+    padding: 0.25rem 0.65rem;
+  }
+
+  /* ── Help overlay ── */
   .lab-overlay {
-    padding: 1rem 0.75rem;
+    padding: 0.75rem;
     align-items: flex-start;
     overflow-y: auto;
   }
 
   .lab-overlay .lab-panel {
-    padding: 1.25rem 1.25rem 1rem;
+    padding: 1.1rem 1rem 0.9rem;
     max-width: 100%;
     height: auto;
     overflow: visible;
   }
 
-  /* Help modal metrics: single column on tiny screens */
   .lab-help-metric-row {
-    grid-template-columns: 2.5rem 1fr;
+    grid-template-columns: 2.75rem 1fr;
     font-size: 0.62rem;
   }
 
-  /* Confirm button: full-width on mobile */
   .lab-action-btn {
     width: 100%;
     text-align: center;
@@ -934,5 +987,10 @@ html, body {
 
   .lab-actions {
     justify-content: stretch;
+  }
+
+  /* ── Footer ── */
+  .lab-footer {
+    padding: 0.35rem 0.65rem;
   }
 }

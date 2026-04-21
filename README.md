@@ -2,7 +2,7 @@
 
 A browser implementation of Teeko — a 1950s abstract strategy game by John Scarne. Play against a minimax AI with alpha-beta pruning, or pass-and-play with a friend.
 
-**[Play it here](https://mp0549.github.io/lab/teeko)** <!-- update link if needed -->
+**[Play it here](https://mp0549.github.io/teeko_ai)** <!-- update link if needed -->
 
 ---
 
