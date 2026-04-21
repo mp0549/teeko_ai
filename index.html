@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TEEKO — THE LAB</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="grid-bg lab-page">
+    <div class="lab-panel">
+
+      <!-- HEADER -->
+      <header class="lab-header">
+        <a href="https://mp0549.github.io/lab/" class="lab-btn">← BACK</a>
+        <div class="lab-header-center">
+          <p class="lab-eyebrow">EXPERIMENT — COMBINATORIAL STRATEGY</p>
+          <h1 class="lab-title">TEEKO</h1>
+        </div>
+        <button class="lab-help-btn" id="help-btn" title="How to play">?</button>
+      </header>
+
+      <div class="lab-rule"></div>
+
+      <!-- STATUS BAR -->
+      <div class="lab-status-bar">
+        <span class="lab-label">SUBJECT</span>
+        <span class="lab-status-text" id="status-text">AWAITING INPUT...</span>
+        <span class="lab-label">TURN&nbsp;<span id="turn-count">0</span></span>
+      </div>
+
+      <div class="lab-rule"></div>
+
+      <!-- MAIN TWO-COLUMN AREA -->
+      <div class="lab-main">
+
+        <!-- LEFT: GAME BOARD -->
+        <section class="game-section">
+
+          <!-- Mode + Color controls -->
+          <div class="game-settings">
+            <div class="game-settings-group">
+              <span class="lab-label">MODE</span>
+              <button class="lab-btn lab-btn--active" id="mode-ai">VS AI</button>
+              <button class="lab-btn" id="mode-2p">2P</button>
+            </div>
+            <div class="game-settings-group">
+              <span class="lab-label">FIRST</span>
+              <button class="lab-btn lab-btn--active" id="first-black">● BLACK</button>
+              <button class="lab-btn" id="first-red">● RED</button>
+            </div>
+          </div>
+
+          <!-- 5×5 board — cells injected by board.js -->
+          <div class="board" id="board"></div>
+
+          <!-- Controls row -->
+          <div class="game-controls">
+            <button class="lab-btn" id="reset-btn">↺ RESET</button>
+            <div class="lab-legend">
+              <div class="legend-item">
+                <div class="legend-piece player-piece"></div>
+                <span id="legend-black">BLACK (YOU)</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-piece ai-piece"></div>
+                <span id="legend-red">RED (A.I.)</span>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- RIGHT: VISUALIZER -->
+        <section class="visualizer-section">
+
+          <div class="vis-header">
+            <span class="lab-eyebrow">SUBSYSTEM — COGNITION MONITOR v1.0</span>
+            <span class="vis-badge">PHASE 2 / ACTIVE</span>
+          </div>
+
+          <div class="lab-rule"></div>
+
+          <!-- Difficulty (hidden in 2P mode) -->
+          <div id="diff-section">
+            <div class="vis-difficulty">
+              <span class="lab-label">DIFFICULTY</span>
+              <div class="vis-difficulty-btns">
+                <button class="lab-btn" id="diff-easy">EASY</button>
+                <button class="lab-btn lab-btn--active" id="diff-med">MED</button>
+                <button class="lab-btn" id="diff-hard">HARD</button>
+                <button class="lab-btn vis-advanced-toggle" id="diff-toggle">ADV ▾</button>
+              </div>
+            </div>
+            <div class="vis-difficulty-advanced" id="diff-advanced">
+              <span class="lab-label">DEPTH</span>
+              <input type="range" id="depth-slider" min="1" max="10" value="4">
+              <span class="lab-label" id="depth-display">4</span>
+            </div>
+            <div class="lab-rule"></div>
+          </div>
+
+          <!-- 2×2 stats grid -->
+          <div class="vis-stats-grid">
+            <div class="vis-stat">
+              <div class="vis-stat-label">NODES EVALUATED</div>
+              <div class="vis-stat-value" id="stat-nodes">—</div>
+            </div>
+            <div class="vis-stat">
+              <div class="vis-stat-label">SEARCH DEPTH</div>
+              <div class="vis-stat-value" id="stat-depth">—</div>
+            </div>
+            <div class="vis-stat">
+              <div class="vis-stat-label">PRUNED BRANCHES</div>
+              <div class="vis-stat-value" id="stat-pruned">—</div>
+            </div>
+            <div class="vis-stat">
+              <div class="vis-stat-label">BEST SCORE</div>
+              <div class="vis-stat-value" id="stat-score">—</div>
+            </div>
+          </div>
+
+          <div class="lab-rule"></div>
+
+          <!-- Heatmap -->
+          <div class="vis-heatmap-section">
+            <div class="vis-heatmap-header">
+              <span class="lab-eyebrow">TERRITORIAL INFLUENCE MAP</span>
+              <span class="vis-badge">POST-MOVE</span>
+            </div>
+            <div class="vis-heatmap-body">
+              <canvas id="heatmap-canvas"></canvas>
+              <div class="vis-heatmap-legend">
+                <div class="vis-heatmap-legend-item">
+                  <div class="vis-heatmap-legend-swatch" style="background:#b91c1c;"></div>
+                  A.I. DOMINANCE
+                </div>
+                <div class="vis-heatmap-legend-item">
+                  <div class="vis-heatmap-legend-swatch" style="background:#1a1a1a;"></div>
+                  PLAYER DOMINANCE
+                </div>
+                <div class="vis-heatmap-legend-item">
+                  <div class="vis-heatmap-legend-swatch" style="background:#e8e8e8;"></div>
+                  CONTESTED
+                </div>
+                <div style="margin-top:0.5rem;" class="vis-pathfinder-desc">
+                  Red dashed lines<br>= active AI<br>threat corridors
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pathfinder -->
+          <div class="vis-pathfinder-section">
+            <div class="vis-pathfinder-header">
+              <span class="lab-eyebrow">SEARCH PATHFINDER</span>
+              <span class="vis-badge" id="pathfinder-badge">STANDBY</span>
+            </div>
+            <div class="vis-pathfinder-body">
+              <canvas id="pathfinder-canvas"></canvas>
+              <div class="vis-pathfinder-desc">
+                Live visualization<br>of minimax paths<br>during A.I. search.<br><br>
+                Animates while<br>A.I. is computing.
+              </div>
+            </div>
+          </div>
+
+          <!-- Phase tracker -->
+          <div class="vis-phase-tracker" id="phase-tracker">DROP: ○○○○○○○○</div>
+
+          <!-- Log -->
+          <div class="vis-log-header">
+            <span class="lab-label">GAME LOG</span>
+            <button class="lab-btn" id="clear-log-btn">CLEAR</button>
+          </div>
+          <div class="vis-log" id="vis-log"></div>
+
+        </section>
+
+      </div><!-- /.lab-main -->
+
+      <div class="lab-rule"></div>
+      <div class="lab-footer">
+        <span class="lab-eyebrow">CLASSIFICATION: UNCLASSIFIED // FOR LAB USE ONLY</span>
+      </div>
+
+    </div><!-- /.lab-panel -->
+  </div><!-- /.grid-bg -->
+
+
+  <!-- HELP OVERLAY -->
+  <div id="help-overlay" class="lab-overlay hidden">
+    <div class="lab-panel" onclick="event.stopPropagation()">
+      <p class="lab-eyebrow">EXPERIMENT BRIEFING</p>
+      <h2 class="lab-title">HOW TO PLAY</h2>
+      <div class="lab-rule"></div>
+
+      <div class="lab-help-body">
+        <p>Teeko is a two-phase strategy game played on a 5×5 grid. Align four of your pieces in a row, column, diagonal, or 2×2 box to win.</p>
+
+        <div class="lab-help-metrics">
+          <p class="lab-help-metric-title">GAME PHASES</p>
+          <div class="lab-help-metric-row">
+            <span class="lab-help-metric-icon">DROP</span>
+            <span><strong>PHASE 1</strong> — Alternate placing pieces on any empty cell. Ends after all 8 pieces (4 each) are on the board.</span>
+          </div>
+          <div class="lab-help-metric-row">
+            <span class="lab-help-metric-icon">MOVE</span>
+            <span><strong>PHASE 2</strong> — Alternate sliding a piece to any adjacent empty cell (8 directions). No new pieces.</span>
+          </div>
+          <div class="lab-help-metric-row">
+            <span class="lab-help-metric-icon">DRAW</span>
+            <span><strong>THREEFOLD REPETITION</strong> — If the same board position occurs 3 times, the game is declared a draw. The A.I. will seek a draw to avoid defeat when significantly losing.</span>
+          </div>
+        </div>
+
+        <div class="lab-help-metrics">
+          <p class="lab-help-metric-title">SYSTEM TELEMETRY</p>
+          <div class="lab-help-metric-row">
+            <span class="lab-help-metric-icon">[ MAP ]</span>
+            <span><strong>TERRITORIAL INFLUENCE</strong> — Heatmap showing which cells each player controls based on heuristic scoring. Red = A.I., Dark = player.</span>
+          </div>
+          <div class="lab-help-metric-row">
+            <span class="lab-help-metric-icon">[ PATH ]</span>
+            <span><strong>SEARCH PATHFINDER</strong> — Live animation of minimax branches explored during the A.I.'s turn.</span>
+          </div>
+        </div>
+
+        <p class="lab-help-tip">Use MODE to switch to 2-player. Use FIRST to choose which color moves first.</p>
+      </div>
+
+      <div class="lab-rule" style="margin: 1.25rem 0 1rem;"></div>
+      <div class="lab-actions">
+        <button id="close-help-btn" class="lab-action-btn">GOT IT</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts in dependency order -->
+  <script src="js/gameState.js"></script>
+  <script src="js/aiHeuristic.js"></script>
+  <script src="js/ai.js"></script>
+  <script src="js/board.js"></script>
+  <script src="js/heatmap.js"></script>
+  <script src="js/pathfinder.js"></script>
+  <script src="js/visualizer.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>
